@@ -27,7 +27,11 @@ export type ProjectWithAuthor = {
 
 export function ProjectCard({
   project,
+<<<<<<< HEAD
   currentUserId: propCurrentUserId,
+=======
+  currentUserId,
+>>>>>>> 892e297ec11695662ea735162b049ead8db3105e
   onDeleted,
   onLikeToggled,
 }: {
@@ -38,6 +42,7 @@ export function ProjectCard({
 }) {
   const [imgUrl, setImgUrl] = useState<string | null>(null);
   const [liking, setLiking] = useState(false);
+<<<<<<< HEAD
   
   // State untuk menyimpan ID user yang sedang aktif (login)
   const [activeUserId, setActiveUserId] = useState<string | null>(propCurrentUserId || null);
@@ -70,21 +75,44 @@ export function ProjectCard({
 
   // Logika utama: Tombol hapus hanya muncul jika ID user yang login SAMA dengan pembuat proyek
   const isOwner = activeUserId === project.user_id;
+=======
+
+  useEffect(() => {
+    let active = true;
+    getSignedUrl("project-images", project.image_url)
+      .then((u) => { if (active) setImgUrl(u); })
+      .catch(() => {});
+    return () => { active = false; };
+  }, [project.image_url]);
+
+  const isOwner = currentUserId === project.user_id;
+>>>>>>> 892e297ec11695662ea735162b049ead8db3105e
   const verified = isVerifiedEmail(project.author?.email);
 
   async function toggleLike(e: React.MouseEvent) {
     e.preventDefault();
     e.stopPropagation();
+<<<<<<< HEAD
     if (!activeUserId) {
+=======
+    if (!currentUserId) {
+>>>>>>> 892e297ec11695662ea735162b049ead8db3105e
       toast.error("Masuk dulu untuk menyukai project.");
       return;
     }
     setLiking(true);
     if (project.liked_by_me) {
+<<<<<<< HEAD
       await supabase.from("likes").delete().eq("user_id", activeUserId).eq("project_id", project.id);
       onLikeToggled?.(project.id, false);
     } else {
       await supabase.from("likes").insert({ user_id: activeUserId, project_id: project.id });
+=======
+      await supabase.from("likes").delete().eq("user_id", currentUserId).eq("project_id", project.id);
+      onLikeToggled?.(project.id, false);
+    } else {
+      await supabase.from("likes").insert({ user_id: currentUserId, project_id: project.id });
+>>>>>>> 892e297ec11695662ea735162b049ead8db3105e
       onLikeToggled?.(project.id, true);
     }
     setLiking(false);
@@ -93,6 +121,7 @@ export function ProjectCard({
   async function handleDelete(e: React.MouseEvent) {
     e.preventDefault();
     e.stopPropagation();
+<<<<<<< HEAD
 
     // Konfirmasi sebelum menghapus
     if (!confirm("Hapus Project ini secara permanen?")) {
@@ -122,6 +151,17 @@ export function ProjectCard({
     } catch (err: any) {
       toast.error(err.message || "Gagal menghapus project.");
     }
+=======
+    if (!confirm("Hapus Project ini secara permanen?")) return;
+    const { error } = await supabase.from("projects").delete().eq("id", project.id);
+    if (error) {
+      toast.error("Gagal menghapus.");
+      return;
+    }
+    await supabase.storage.from("project-images").remove([project.image_url]);
+    toast.success("Project dihapus.");
+    onDeleted?.(project.id);
+>>>>>>> 892e297ec11695662ea735162b049ead8db3105e
   }
 
   return (
@@ -137,8 +177,11 @@ export function ProjectCard({
         ) : (
           <div className="h-full w-full animate-pulse bg-accent/30" />
         )}
+<<<<<<< HEAD
         
         {/* Tombol Hapus: Akan tampil untuk pemilik project */}
+=======
+>>>>>>> 892e297ec11695662ea735162b049ead8db3105e
         {isOwner && (
           <button
             onClick={handleDelete}
