@@ -4,6 +4,7 @@ import { Search, Plus, TrendingUp, Sparkles } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
 import { Navbar } from "@/components/navbar";
+import { WarningPopup } from "@/components/warning-popup"; // Impor baru
 import { ProjectCard, type ProjectWithAuthor } from "@/components/project-card";
 import { PostProjectModal } from "@/components/post-project-modal";
 import { VerifiedBadge, isVerifiedEmail } from "@/components/verified-badge";
@@ -137,9 +138,9 @@ function ExplorePage() {
   return (
     <div className="min-h-screen">
       <Navbar />
+      <WarningPopup /> {/* Komponen Peringatan dipasang di sini */}
 
       <main className="mx-auto max-w-6xl px-4 pb-28 pt-6 sm:px-5">
-        {/* Search */}
         <div className="glass-strong sticky top-[60px] z-20 -mx-4 mb-5 rounded-none border-y border-border/50 px-4 py-3 sm:static sm:mx-0 sm:rounded-2xl sm:border sm:px-4">
           <div className="flex items-center gap-2.5 rounded-full bg-background/60 px-4 py-2.5 ring-1 ring-border focus-within:ring-primary/50">
             <Search size={16} className="text-muted-foreground" />
@@ -152,7 +153,6 @@ function ExplorePage() {
           </div>
         </div>
 
-        {/* Tabs */}
         <div className="mb-5 flex gap-1.5">
           {(["project", "developer"] as const).map((t) => (
             <button
@@ -171,7 +171,6 @@ function ExplorePage() {
 
         {tab === "project" && (
           <>
-            {/* Sort + tag filters */}
             <div className="mb-4 flex items-center gap-2 overflow-x-auto pb-1">
               <button
                 onClick={() => setSort("new")}
@@ -218,7 +217,7 @@ function ExplorePage() {
                   <ProjectCard
                     key={p.id}
                     project={p}
-                    currentUserId={user.id} 
+                    currentUserId={user.id}
                     onLikeToggled={handleLikeToggled}
                     onDeleted={handleDeleted}
                   />
@@ -265,7 +264,6 @@ function ExplorePage() {
         )}
       </main>
 
-      {/* Floating action button */}
       <button
         onClick={() => setPostOpen(true)}
         aria-label="Posting Project"
