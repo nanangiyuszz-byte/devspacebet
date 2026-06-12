@@ -218,7 +218,7 @@ function ExplorePage() {
                   <ProjectCard
                     key={p.id}
                     project={p}
-                    currentUserId={user.id}
+                    currentUserId={user.id} 
                     onLikeToggled={handleLikeToggled}
                     onDeleted={handleDeleted}
                   />
